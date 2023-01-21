@@ -8,20 +8,34 @@ import { FilterContacts } from 'components/FilterContacts';
 export class App extends Component {
   state = {
     contacts: [
-      // { name: 'Artem', number: '+123456789', id: nanoid() },
-      // { name: 'Mark', number: '+766667654', id: nanoid() },
-      // { name: 'Lorek', number: '+344678766', id: nanoid() },
-      // { name: 'Tork', number: '+0987656444', id: nanoid() },
+      { name: 'Artem', number: '+123456789', id: nanoid() },
+      { name: 'Mark', number: '+766667654', id: nanoid() },
+      { name: 'Lorek', number: '+344678766', id: nanoid() },
+      { name: 'Tork', number: '+0987656444', id: nanoid() },
     ],
     filter: '',
   };
 
+  componentDidMount() {
+    const saveContacts = JSON.parse(localStorage.getItem('contacts'));
+
+    if (saveContacts) {
+      this.setState({ contacts: saveContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevState.contacts);
+    console.log(this.state.contacts);
+
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   addContact = (values, actions) => {
     const { name, number } = values;
     const { contacts } = this.state;
-
-    console.log(name);
-    console.log(number);
 
     // Check name for repetition
     const normalizeName = name.toLowerCase();
